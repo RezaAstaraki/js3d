@@ -28,4 +28,6 @@ setupCounter(document.querySelector<HTMLButtonElement>('#counter')!)
 
 setupThree(document.querySelector<HTMLDivElement>('#three')!)
 
+setupThree(document.querySelector('#three')!)
+
 
