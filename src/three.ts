@@ -2,6 +2,7 @@ import *  as t from 'three'
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
+import {passTexture} from 'three/tsl'
 
 
 
@@ -42,6 +43,8 @@ export function setupThree() {
   mesh2.scale.set(scale, scale, scale)
   mesh.add(mesh2)
 
+  mesh2.rotateY(2)
+
   const axes = new t.AxesHelper(1.5)
   scene.add(axes)
 
@@ -50,12 +53,33 @@ export function setupThree() {
   mesh.position.set(1,1,0)
   scene.add(pivot)
 
+ /**
+ * group 2
+ */
+
+
+  const group2 = new t.Group()
+  const axes2 = new t.AxesHelper(1.5)
+  group2.add(axes2)
+  group2.position.y=3
+  const copiedMesh = mesh.clone()
+  copiedMesh.material = mesh.material.clone()
+  copiedMesh.geometry= mesh.geometry.clone()
+  group2.add(copiedMesh)
+
+scene.add(group2)
+
   function rotate(){
     requestAnimationFrame(rotate)
-    pivot.rotation.y += 0.01   
+    pivot.rotation.y += 0.01
+
+
+    group2.rotation.z += 0.02
+
+
     controls.update() // 🔥 very important if damping enabled
     renderer.render(scene, camera)
   }
-
+						
   rotate()
 }
