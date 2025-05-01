@@ -2,7 +2,6 @@ import *  as t from 'three'
 // import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls'
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js'
-import {passTexture} from 'three/tsl'
 
 
 
@@ -21,10 +20,10 @@ export function setupThree() {
   const fov = 75 
   const aspect = w / h
   const near = .1 
-  const far = 10
+  const far = 15
   const camera = new t.PerspectiveCamera(fov, aspect, near, far)
 
-  camera.position.set(2, 2, .5)
+  camera.position.set(0, 3, 8)
   camera.lookAt(0, 0, 0)
 
   const controls = new OrbitControls(camera, renderer.domElement)
@@ -43,14 +42,23 @@ export function setupThree() {
   mesh2.scale.set(scale, scale, scale)
   mesh.add(mesh2)
 
-  mesh2.rotateY(2)
+
 
   const axes = new t.AxesHelper(1.5)
   scene.add(axes)
 
-  const pivot = new t.Object3D()
+  const pivot = new t.Group()
   pivot.add(mesh)
   mesh.position.set(1,1,0)
+  for(let i=0 ; i<5 ;i++){
+    let m = mesh.clone()
+    m.material=mesh.material.clone()
+    m.geometry=mesh.geometry.clone()
+    m.position.set(0,0,0)
+    m.rotation.y= Math.PI * 2 /5 * i
+    m.translateX(2)
+    pivot.add(m)
+  }
   scene.add(pivot)
 
  /**
@@ -58,23 +66,24 @@ export function setupThree() {
  */
 
 
-  const group2 = new t.Group()
-  const axes2 = new t.AxesHelper(1.5)
-  group2.add(axes2)
-  group2.position.y=3
-  const copiedMesh = mesh.clone()
-  copiedMesh.material = mesh.material.clone()
-  copiedMesh.geometry= mesh.geometry.clone()
-  group2.add(copiedMesh)
+  // const group2 = new t.Group()
+//   const axes2 = new t.AxesHelper(1.5)
+//   group2.add(axes2)
+//   group2.position.y=3
+//   const copiedMesh = mesh.clone()
+//   copiedMesh.material = mesh.material.clone()
+//   copiedMesh.geometry= mesh.geometry.clone()
+//   copiedMesh.material.color.set('red')
+//   group2.add(copiedMesh)
 
-scene.add(group2)
+// scene.add(group2)
 
   function rotate(){
     requestAnimationFrame(rotate)
     pivot.rotation.y += 0.01
 
 
-    group2.rotation.z += 0.02
+    // group2.rotation.z += 0.02
 
 
     controls.update() // 🔥 very important if damping enabled
