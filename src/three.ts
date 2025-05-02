@@ -4,6 +4,7 @@ import * as t from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import p from "../public/face.avif";
+import b from "../public/backside.png";
 
 export function setupThree() {
   const containerDiv = document.getElementById("three") as HTMLDivElement;
@@ -36,16 +37,22 @@ export function setupThree() {
 
   const textureLoader = new t.TextureLoader();
   const picTextuer = textureLoader.load(p);
+  const picTextuerBack = textureLoader.load(b);
 
   const boxMaterial = Array.from({ length: cardNumbers }).map((_, index) => {
-    if (index !== 4) {
+    if (index === 4) {
       return new t.MeshBasicMaterial({
-        color: 0xccff,
+        map: picTextuer,
+        wireframe: false,
+      });
+    } else if (index === 5) {
+      return new t.MeshBasicMaterial({
+        map: picTextuerBack,
         wireframe: false,
       });
     } else {
       return new t.MeshBasicMaterial({
-        map: picTextuer,
+        color: 0xccff,
         wireframe: false,
       });
     }
