@@ -5,6 +5,15 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls.js";
 
 import p from "../public/face.avif";
 import b from "../public/backside.png";
+import unviverse from "../public/universe.jpg";
+
+import px from "../public/px.jpg";
+import nx from "../public/nx.jpg";
+import py from "../public/py.jpg";
+import ny from "../public/ny.jpg";
+import pz from "../public/pz.jpg";
+import nz from "../public/nz.jpg";
+import nx2 from "../public//raw/nx.png";
 
 export function setupThree() {
   const containerDiv = document.getElementById("three") as HTMLDivElement;
@@ -38,6 +47,13 @@ export function setupThree() {
   const textureLoader = new t.TextureLoader();
   const picTextuer = textureLoader.load(p);
   const picTextuerBack = textureLoader.load(b);
+  // const universeBackground = textureLoader.load(unviverse);
+
+  const l = new t.CubeTextureLoader();
+
+  const threeDBg = l.load([px, nx, py, ny, pz, nz]);
+
+  scene.background = threeDBg;
 
   const boxMaterial = Array.from({ length: cardNumbers }).map((_, index) => {
     if (index === 4) {
