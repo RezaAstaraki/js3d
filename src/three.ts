@@ -7,6 +7,8 @@ import p from "../public/face.avif";
 import b from "../public/backside.png";
 import unviverse from "../public/universe.jpg";
 
+import sp from "../public/simple-space-backgrounds-3840x2160-stars-galaxy-dark-matter-night-sky-26274.jpg";
+
 import px from "../public/px.jpg";
 import nx from "../public/nx.jpg";
 import py from "../public/py.jpg";
@@ -23,7 +25,7 @@ export function setupThree() {
 
   const cardSize = { w: 2, h: 3, d: 0.01 };
   let cardNumbers = 10;
-  const gap = cardSize.w / 2;
+  const gap = cardSize.w;
   const r = (cardNumbers * cardSize.w + cardNumbers * gap) / (Math.PI * 2);
 
   const renderer = new t.WebGLRenderer({ antialias: true });
@@ -36,16 +38,25 @@ export function setupThree() {
   const far = r * 10;
   const camera = new t.PerspectiveCamera(fov, aspect, near, far);
 
-  camera.position.set(0, r, 3 * r);
+  camera.zoom = 1;
+
+  camera.position.set(-2.5 * r, 0.2 * r, 3 * r);
   camera.lookAt(0, 0, 0);
 
   const controls = new OrbitControls(camera, renderer.domElement);
   controls.enableDamping = true;
 
   const scene = new t.Scene();
+  renderer.toneMapping = t.ACESFilmicToneMapping;
+  renderer.toneMappingExposure = 0.5;
 
   const textureLoader = new t.TextureLoader();
   const picTextuer = textureLoader.load(p);
+  textureLoader.load(sp, (texture) => {
+    texture.mapping = t.EquirectangularReflectionMapping;
+    scene.background = texture;
+    scene.environment = texture;
+  });
   const picTextuerBack = textureLoader.load(b);
   // const universeBackground = textureLoader.load(unviverse);
 
@@ -53,7 +64,7 @@ export function setupThree() {
 
   const threeDBg = l.load([px, nx, py, ny, pz, nz]);
 
-  scene.background = threeDBg;
+  // scene.background = threeDBg;
 
   const boxMaterial = Array.from({ length: cardNumbers }).map((_, index) => {
     if (index === 4) {
